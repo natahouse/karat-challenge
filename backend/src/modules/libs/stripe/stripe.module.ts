@@ -1,12 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 
 import { ConfigurableModuleClass } from './stripe.module-definition';
 import { StripeService } from './services/stripe.service';
-import { ConfigModule } from '@nestjs/config';
 
+@Global()
 @Module({
   providers: [StripeService],
   exports: [StripeService],
-  imports: [ConfigModule],
 })
 export class StripeModule extends ConfigurableModuleClass {}

@@ -5,5 +5,6 @@ import { StripeEventsController } from './stripe-events.controller';
 @Module({
   controllers: [StripeEventsController],
   providers: [StripeEventsService],
+  imports: [],
 })
 export class StripeEventsModule {}

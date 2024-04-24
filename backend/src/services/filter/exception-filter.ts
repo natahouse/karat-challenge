@@ -27,7 +27,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const response =
       exception instanceof HttpException ? exception.getResponse() : null;
 
-    const cause = response['message'] ?? 'Internal Server Error';
+    const cause = (response && response['message']) ?? 'Internal Server Error';
 
     const responseBody = {
       timestamp: new Date().toISOString(),
