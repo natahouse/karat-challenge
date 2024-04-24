@@ -1,8 +1,11 @@
 import { Payment } from "@/_modules/payments/domain/entities/payment.entity"
-import { ListPaymentUseCase } from "@/_modules/payments/domain/use-cases/list-payments.use-case"
+import {
+  ListPaymentUseCase,
+  ListPaymentUseCaseOutput,
+} from "@/_modules/payments/domain/use-cases/list-payments.use-case"
 
 export class MockListPaymentService implements ListPaymentUseCase {
-  async execute(): Promise<{ payments: Payment[]; total: number }> {
+  async execute(): Promise<ListPaymentUseCaseOutput> {
     const payments: Payment[] = [
       {
         id: "1",

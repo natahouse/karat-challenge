@@ -10,3 +10,14 @@ export function formatDate(date: Date) {
     new Date(date)
   )
 }
+
+export function formatCurrency(value: number) {
+  return Intl.NumberFormat("pt-BR", {
+    currency: "BRL",
+    currencyDisplay: "symbol",
+    currencySign: "standard",
+    style: "currency",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value)
+}
