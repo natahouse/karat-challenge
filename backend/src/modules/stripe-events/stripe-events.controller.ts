@@ -4,37 +4,67 @@ import {
   Post,
   Req,
   RawBodyRequest,
+  Headers,
+  BadRequestException,
   UnauthorizedException,
+  Logger,
+  Res,
+  RawBody,
+  Header,
+  NotFoundException,
+  HttpCode,
 } from '@nestjs/common';
-import { StripeEventsService } from './stripe-events.service';
 
-import stripe from 'stripe';
 import { ConfigService } from '@nestjs/config';
+import { StripeService } from '../libs/stripe/services/stripe.service';
+import Stripe from 'stripe';
 
 @Controller('stripe-events')
 export class StripeEventsController {
+  private readonly logger = new Logger(StripeEventsController.name);
+
   constructor(
-    private readonly service: StripeEventsService,
     private readonly configService: ConfigService,
+    private readonly stripeService: StripeService,
   ) {}
 
-  @Get()
-  async test() {
-    return this.configService.get<string>('STRIPE_WEBHOOK_SECRET');
-  }
-
   @Post()
-  async handleWebhook(@Req() req: RawBodyRequest<Request>) {
+  @Header('Stripe-Version', '2024-04-10')
+  @HttpCode(200)
+  handleWebhook(
+    @RawBody() rawBody: any,
+    @Headers('stripe-signature') signature,
+  ) {
+    let event: Stripe.Event;
+
     try {
-      const signature = req.headers['stripe-signature'];
       const secret = this.configService.get<string>('STRIPE_WEBHOOK_SECRET');
-      const event = stripe.webhooks.constructEvent(
-        req.rawBody,
+      event = this.stripeService.stripe.webhooks.constructEvent(
+        rawBody,
         signature,
         secret,
       );
     } catch (err) {
       throw new UnauthorizedException('Invalid webhook signature');
     }
+
+    if (!event) throw new BadRequestException('Invalid Event');
+
+    if (event.type === 'issuing_authorization.request') {
+    }
+
+    if (event.type === 'issuing_authorization.created') {
+      const data = event.data;
+    }
+
+    if (event.type === 'issuing_transaction.created') {
+      const data = event.data;
+    }
+
+    this.logger.debug({
+      event,
+    });
+
+    return { approved: true };
   }
 }
