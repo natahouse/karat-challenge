@@ -7,6 +7,7 @@ import { BullModule } from '@nestjs/bull';
 import { AppController } from './app.controller';
 import { DrizzleModule } from './modules/libs/drizzle/drizzle.module';
 import { PaymentsModule } from './modules/payments/payments.module';
+import { AuthorizationsModule } from './modules/authorizations/authorizations.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { PaymentsModule } from './modules/payments/payments.module';
       }),
     }),
     PaymentsModule,
+    AuthorizationsModule,
     StripeEventsModule,
   ],
   controllers: [AppController],
