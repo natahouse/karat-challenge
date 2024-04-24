@@ -53,10 +53,6 @@ export class StripeEventsController {
     if (event.type === 'issuing_authorization.request') {
     }
 
-    if (event.type === 'issuing_authorization.created') {
-      const data = event.data;
-    }
-
     if (event.type === 'issuing_transaction.created') {
       const data = event.data;
     }

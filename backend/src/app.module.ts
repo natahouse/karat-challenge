@@ -5,10 +5,22 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { StripeModule } from './modules/libs/stripe/stripe.module';
 import { BullModule } from '@nestjs/bull';
 import { AppController } from './app.controller';
+import { DrizzleModule } from './modules/libs/drizzle/drizzle.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    DrizzleModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        host: configService.get<string>('POSTGRES_HOST'),
+        port: configService.get<number>('POSTGRES_PORT'),
+        database: configService.get<string>('POSTGRES_DB'),
+        user: configService.get<string>('POSTGRES_USER'),
+        password: configService.get<string>('POSTGRES_PASSWORD'),
+        sync: configService.get<string>('NODE_ENV') === 'development',
+      }),
+    }),
     StripeModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
