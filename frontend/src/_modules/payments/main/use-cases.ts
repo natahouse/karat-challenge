@@ -1,6 +1,3 @@
-import { ListPaymentUseCase } from "../domain/use-cases/list-payments.use-case"
-import { PaymentMockRepository } from "../infra/repositories/payment-mock.repository"
+import { MockListPaymentService } from "../domain/services/list-payments-mock.service"
 
-export const listPaymentUseCase = new ListPaymentUseCase(
-  new PaymentMockRepository()
-)
+export const listPaymentService = new MockListPaymentService()

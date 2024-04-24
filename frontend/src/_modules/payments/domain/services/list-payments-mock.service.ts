@@ -1,8 +1,8 @@
 import { Payment } from "@/_modules/payments/domain/entities/payment.entity"
-import { PaymentRepository } from "@/_modules/payments/domain/repositories/payment.repository"
+import { ListPaymentUseCase } from "@/_modules/payments/domain/use-cases/list-payments.use-case"
 
-export class PaymentMockRepository implements PaymentRepository {
-  async findAndCount(): Promise<[Payment[], number]> {
+export class MockListPaymentService implements ListPaymentUseCase {
+  async execute(): Promise<{ payments: Payment[]; total: number }> {
     const payments: Payment[] = [
       {
         id: "1",
@@ -45,6 +45,6 @@ export class PaymentMockRepository implements PaymentRepository {
         amount: 450,
       },
     ]
-    return [payments, payments.length]
+    return { payments, total: payments.length }
   }
 }

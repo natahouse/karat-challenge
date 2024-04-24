@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 
 import { Payment } from "@/_modules/payments/domain/entities/payment.entity"
-import { listPaymentUseCase } from "@/_modules/payments/main/use-cases"
+import { listPaymentService } from "@/_modules/payments/main/use-cases"
 import { DataTable } from "@/components/ui/data-table"
 import { Skeleton } from "@/components/ui/skeleton"
 
@@ -15,8 +15,8 @@ export const PaymentDataTable = () => {
 
   useEffect(() => {
     setIsPending(true)
-    listPaymentUseCase
-      .execute({})
+    listPaymentService
+      .execute()
       .then((result) => setData(result.payments))
       .finally(() => setIsPending(false))
   }, [])
