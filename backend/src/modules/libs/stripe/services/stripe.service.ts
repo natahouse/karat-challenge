@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import Stripe from 'stripe';
 import { MODULE_OPTIONS_TOKEN } from '../stripe.module-definition';
-import { StripeModuleOptions } from '../types'
+import { StripeModuleOptions } from '../types';
 
 @Injectable()
 export class StripeService {

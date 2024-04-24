@@ -1,1 +1,1 @@
-export * from './stripe/stripe.module'
+export * from './stripe/stripe.module';
