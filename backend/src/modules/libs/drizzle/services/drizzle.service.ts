@@ -34,7 +34,7 @@ export class DrizzleService implements OnModuleInit {
     });
   }
 
-  async getDrizzle() {
+  getDb() {
     if (!this.drizzle) {
       const pool = new Pool({
         host: this.options.host,

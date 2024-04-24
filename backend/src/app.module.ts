@@ -6,6 +6,7 @@ import { StripeModule } from './modules/libs/stripe/stripe.module';
 import { BullModule } from '@nestjs/bull';
 import { AppController } from './app.controller';
 import { DrizzleModule } from './modules/libs/drizzle/drizzle.module';
+import { PaymentsModule } from './modules/payments/payments.module';
 
 @Module({
   imports: [
@@ -39,7 +40,7 @@ import { DrizzleModule } from './modules/libs/drizzle/drizzle.module';
         },
       }),
     }),
-
+    PaymentsModule,
     StripeEventsModule,
   ],
   controllers: [AppController],
