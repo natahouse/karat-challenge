@@ -1,12 +1,18 @@
 import { Payment } from "@/_modules/payments/domain/entities/payment.entity"
 import {
   ListPaymentUseCase,
+  ListPaymentUseCaseInput,
   ListPaymentUseCaseOutput,
 } from "@/_modules/payments/domain/use-cases"
 
 export class MockListPaymentService implements ListPaymentUseCase {
-  async execute(): Promise<ListPaymentUseCaseOutput> {
+  async execute(
+    input: ListPaymentUseCaseInput
+  ): Promise<ListPaymentUseCaseOutput> {
+    console.log(`fetching data until ${input.untilDate}`)
+
     await new Promise((resolve) => setTimeout(() => resolve(null), 2000))
+
     const payments: Payment[] = [
       {
         id: "1",

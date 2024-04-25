@@ -14,6 +14,7 @@ export const PaymentDataTable = () => {
   const searchParams = useSearchParams()
   const page = searchParams.get("page")
 
+  const [untilDate] = useState<string>(new Date().toISOString())
   const [data, setData] = useState<Payment[]>([])
   const [total, setTotal] = useState(0)
   const [isPending, setIsPending] = useState(true)
@@ -21,13 +22,13 @@ export const PaymentDataTable = () => {
   useEffect(() => {
     setIsPending(true)
     listPaymentService
-      .execute()
+      .execute({ untilDate })
       .then((result) => {
         setData(result.payments)
         setTotal(result.total)
       })
       .finally(() => setIsPending(false))
-  }, [page])
+  }, [page, untilDate])
 
   if (isPending) {
     return (
