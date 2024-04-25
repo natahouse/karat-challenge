@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
-import { FetchAllAuthorizationsService } from './services/fetch-all-authorizations.service';
-import { CreateAuthorizationsService } from './services';
+import {
+  CreateAuthorizationFromEventService,
+  FetchAllAuthorizationsService,
+} from './services';
 
 @Controller('authorizations')
 export class AuthorizationController {
@@ -8,7 +10,7 @@ export class AuthorizationController {
 
   constructor(
     private readonly fetchAllAuthorizationsService: FetchAllAuthorizationsService,
-    private readonly createAuthorizationsService: CreateAuthorizationsService,
+    private readonly createAuthorizationFromEventService: CreateAuthorizationFromEventService,
   ) {}
 
   @Get()
@@ -16,8 +18,9 @@ export class AuthorizationController {
     return await this.fetchAllAuthorizationsService.execute();
   }
 
+  // TODO: Remove after integration
   @Post()
   async create(@Body() body: any) {
-    return await this.createAuthorizationsService.execute(body);
+    return await this.createAuthorizationFromEventService.execute(body);
   }
 }

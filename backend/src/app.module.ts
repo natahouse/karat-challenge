@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { DrizzleModule } from './modules/libs/drizzle/drizzle.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { AuthorizationsModule } from './modules/authorizations/authorizations.module';
+import { CardsModule } from './modules/cards/cards.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { AuthorizationsModule } from './modules/authorizations/authorizations.mo
     PaymentsModule,
     AuthorizationsModule,
     StripeEventsModule,
+    CardsModule,
   ],
   controllers: [AppController],
   providers: [],

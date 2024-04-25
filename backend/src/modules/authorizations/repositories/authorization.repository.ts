@@ -14,4 +14,6 @@ export abstract class AuthorizationRepository {
     authorization: AuthorizationEntity,
     tx: Transaction,
   ): Promise<void>;
+
+  abstract findByExternalId(idExternal: string): Promise<AuthorizationEntity>;
 }
