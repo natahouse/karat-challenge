@@ -21,6 +21,18 @@ export class SqlCardRepository implements CardRepository {
     });
   }
 
+  async findOne(id: string) {
+    const db = this.drizzleService.getDb();
+
+    const [card] = await db
+      .select({ id: this.schema.id, idExternal: this.schema.idExternal })
+      .from(this.schema)
+      .where(eq(this.schema.id, id))
+      .limit(1);
+
+    return card;
+  }
+
   async findByExternalId(idExternal: string) {
     const db = this.drizzleService.getDb();
 

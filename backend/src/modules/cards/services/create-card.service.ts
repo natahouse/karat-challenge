@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { DrizzleService } from 'src/modules/libs/drizzle/services/drizzle.service';
 import { CardRepository } from 'src/modules/cards/repositories';

@@ -56,13 +56,14 @@ export class CreateTransactionFromEventService {
         });
       }
 
-      const entity: TransactionEntity = {
-        idExternal: event.id,
-        idAuthorization: authorization.id,
-        idCard: card.id,
-      };
-
-      const transaction = await this.transactionRepository.save(entity, tx);
+      const transaction = await this.transactionRepository.save(
+        {
+          idExternal: event.id,
+          idAuthorization: authorization.id,
+          idCard: card.id,
+        },
+        tx,
+      );
 
       const payment = await this.paymentRepository.findOneByAuthorization(
         authorization.id,

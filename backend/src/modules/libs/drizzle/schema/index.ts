@@ -86,6 +86,7 @@ export const payment = pgTable(
       idAuthorizationIdx: index('payments_id_authorization_idx').on(
         table.idAuthorization,
       ),
+      idCardIdx: index('payments_id_card_idx').on(table.idCard),
     };
   },
 );

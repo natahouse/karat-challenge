@@ -6,7 +6,8 @@ import { PaymentRepository } from './payment.repository';
 import { PaymentEntity } from '../entities/payment.entity';
 import { Transaction } from 'src/modules/libs/drizzle/types';
 
-import { eq } from 'drizzle-orm';
+import { and, countDistinct, desc, eq, lte, ne } from 'drizzle-orm';
+import { BaseFilters } from 'src/database/types';
 
 @Injectable()
 export class SqlPaymentRepository implements PaymentRepository {
@@ -70,6 +71,52 @@ export class SqlPaymentRepository implements PaymentRepository {
       .limit(1);
 
     return payment;
+  }
+
+  async findByCard(idCard: string, filters?: BaseFilters) {
+    const db = this.drizzleService.getDb();
+
+    const queryFilters = [
+      eq(this.schema.idCard, idCard),
+      filters.createdAt
+        ? lte(this.schema.createdAt, filters.createdAt)
+        : undefined,
+      ne(this.schema.status, 'pending'),
+    ];
+
+    const [{ total }] = await db
+      .select({ total: countDistinct(this.schema.id) })
+      .from(this.schema)
+      .where(and(...queryFilters));
+
+    if (total === 0)
+      return {
+        total: 0,
+        entities: [],
+      };
+
+    const entities = await db
+      .select({
+        id: this.schema.id,
+        idAuthorization: this.schema.idTransaction,
+        idTransaction: this.schema.idTransaction,
+        idCard: this.schema.idCard,
+        businessName: this.schema.businessName,
+        category: this.schema.category,
+        amount: this.schema.amount,
+        createdAt: this.schema.createdAt,
+        status: this.schema.status,
+      })
+      .from(this.schema)
+      .where(and(...queryFilters))
+      .limit(filters.limit ?? 10)
+      .offset(filters.offset ?? 0)
+      .orderBy(desc(this.schema.createdAt));
+
+    return {
+      entities,
+      total,
+    };
   }
 
   async update(id: string, fields: Partial<PaymentEntity>, tx?: Transaction) {

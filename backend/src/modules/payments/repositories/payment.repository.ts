@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PaymentEntity } from '../entities/payment.entity';
 import { Transaction } from 'src/modules/libs/drizzle/types';
+import { BaseFilters, BaseReturn } from 'src/database/types';
 
 @Injectable()
 export abstract class PaymentRepository {
@@ -11,6 +12,13 @@ export abstract class PaymentRepository {
   abstract findOneByAuthorization(
     idAuthorization: string,
   ): Promise<PaymentEntity>;
+
+  abstract findByCard(
+    idCard: string,
+    filters?: BaseFilters,
+  ): Promise<BaseReturn<PaymentEntity>>;
+
+  // abstract getMetrics(): Promise<{ sum: number; cnt: number }>;
 
   abstract update(
     id: string,
