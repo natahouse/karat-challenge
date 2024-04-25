@@ -17,6 +17,9 @@ import { CardsModule } from '../cards/cards.module';
     CreateAuthorizationFromEventService,
   ],
   imports: [CardsModule],
-  exports: [CreateAuthorizationFromEventService],
+  exports: [
+    CreateAuthorizationFromEventService,
+    { provide: AuthorizationRepository, useClass: SqlAuthorizationRepository },
+  ],
 })
 export class AuthorizationsModule {}

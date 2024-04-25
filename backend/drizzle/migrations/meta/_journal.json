@@ -15,6 +15,13 @@
       "when": 1714045228964,
       "tag": "0001_misty_lizard",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1714051011437,
+      "tag": "0002_cold_dark_beast",
+      "breakpoints": true
     }
   ]
 }

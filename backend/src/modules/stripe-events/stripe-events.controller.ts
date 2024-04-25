@@ -14,6 +14,7 @@ import { ConfigService } from '@nestjs/config';
 import { StripeService } from '../libs/stripe/services/stripe.service';
 import Stripe from 'stripe';
 import { CreateAuthorizationFromEventService } from '../authorizations/services';
+import { CreateTransactionFromEventService } from '../transactions/services';
 
 @Controller('stripe-events')
 export class StripeEventsController {
@@ -23,6 +24,7 @@ export class StripeEventsController {
     private readonly configService: ConfigService,
     private readonly stripeService: StripeService,
     private readonly createAuthorizationFromEventService: CreateAuthorizationFromEventService,
+    private readonly createTransactionFromEventService: CreateTransactionFromEventService,
   ) {}
 
   @Post()
@@ -52,7 +54,7 @@ export class StripeEventsController {
     }
 
     if (event.type === 'issuing_transaction.created') {
-      const data = event.data;
+      await this.createTransactionFromEventService.execute(event.data.object);
     }
 
     this.logger.debug({

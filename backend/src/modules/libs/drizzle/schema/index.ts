@@ -45,7 +45,7 @@ export const transaction = pgTable(
   'transactions',
   {
     ...baseColumns,
-    idExternal: varchar('name', { length: 256 }),
+    idExternal: varchar('id_external', { length: 256 }),
     idAuthorization: uuid('id_authorization')
       .references(() => authorization.id)
       .notNull(),

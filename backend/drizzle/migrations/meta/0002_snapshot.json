@@ -1,0 +1,333 @@
+{
+  "id": "7ddff863-9391-47be-a73a-64a2d28a0b61",
+  "prevId": "cd34e25b-b1c3-45c4-a39a-68ec469ba555",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "authorizations": {
+      "name": "authorizations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "id_external": {
+          "name": "id_external",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_card": {
+          "name": "id_card",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "approved": {
+          "name": "approved",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {
+        "authorizations_id_external_idx": {
+          "name": "authorizations_id_external_idx",
+          "columns": [
+            "id_external"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "authorizations_id_card_cards_id_fk": {
+          "name": "authorizations_id_card_cards_id_fk",
+          "tableFrom": "authorizations",
+          "tableTo": "cards",
+          "columnsFrom": [
+            "id_card"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "authorizations_id_external_unique": {
+          "name": "authorizations_id_external_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id_external"
+          ]
+        }
+      }
+    },
+    "cards": {
+      "name": "cards",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "id_external": {
+          "name": "id_external",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "cards_id_external_idx": {
+          "name": "cards_id_external_idx",
+          "columns": [
+            "id_external"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "cards_id_external_unique": {
+          "name": "cards_id_external_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id_external"
+          ]
+        }
+      }
+    },
+    "payments": {
+      "name": "payments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "id_card": {
+          "name": "id_card",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_authorization": {
+          "name": "id_authorization",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_transaction": {
+          "name": "id_transaction",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "payments_id_card_cards_id_fk": {
+          "name": "payments_id_card_cards_id_fk",
+          "tableFrom": "payments",
+          "tableTo": "cards",
+          "columnsFrom": [
+            "id_card"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "payments_id_authorization_authorizations_id_fk": {
+          "name": "payments_id_authorization_authorizations_id_fk",
+          "tableFrom": "payments",
+          "tableTo": "authorizations",
+          "columnsFrom": [
+            "id_authorization"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "payments_id_transaction_transactions_id_fk": {
+          "name": "payments_id_transaction_transactions_id_fk",
+          "tableFrom": "payments",
+          "tableTo": "transactions",
+          "columnsFrom": [
+            "id_transaction"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "transactions": {
+      "name": "transactions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "id_external": {
+          "name": "id_external",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id_authorization": {
+          "name": "id_authorization",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id_card": {
+          "name": "id_card",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "transactions_id_external_idx": {
+          "name": "transactions_id_external_idx",
+          "columns": [
+            "id_external"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "transactions_id_authorization_authorizations_id_fk": {
+          "name": "transactions_id_authorization_authorizations_id_fk",
+          "tableFrom": "transactions",
+          "tableTo": "authorizations",
+          "columnsFrom": [
+            "id_authorization"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transactions_id_card_cards_id_fk": {
+          "name": "transactions_id_card_cards_id_fk",
+          "tableFrom": "transactions",
+          "tableTo": "cards",
+          "columnsFrom": [
+            "id_card"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
