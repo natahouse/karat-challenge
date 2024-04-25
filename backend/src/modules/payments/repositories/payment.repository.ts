@@ -18,7 +18,9 @@ export abstract class PaymentRepository {
     filters?: BaseFilters,
   ): Promise<BaseReturn<PaymentEntity>>;
 
-  // abstract getMetrics(): Promise<{ sum: number; cnt: number }>;
+  abstract getMetricsByCard(
+    idCard: string,
+  ): Promise<{ amount: number; total: number }>;
 
   abstract update(
     id: string,

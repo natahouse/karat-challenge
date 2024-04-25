@@ -6,7 +6,7 @@ import { PaymentRepository } from './payment.repository';
 import { PaymentEntity } from '../entities/payment.entity';
 import { Transaction } from 'src/modules/libs/drizzle/types';
 
-import { and, countDistinct, desc, eq, lte, ne } from 'drizzle-orm';
+import { and, countDistinct, desc, eq, lte, ne, sql } from 'drizzle-orm';
 import { BaseFilters } from 'src/database/types';
 
 @Injectable()
@@ -140,5 +140,21 @@ export class SqlPaymentRepository implements PaymentRepository {
       .update(this.schema)
       .set(fieldsToUpdate)
       .where(eq(this.schema.id, id));
+  }
+
+  async getMetricsByCard(idCard: string) {
+    const db = this.drizzleService.getDb();
+
+    const [result] = await db
+      .select({
+        total: countDistinct(this.schema.id),
+        amount: sql`sum(${this.schema.amount})`.mapWith(Number),
+      })
+      .from(this.schema)
+      .where(
+        and(eq(this.schema.idCard, idCard), eq(this.schema.status, 'approved')),
+      );
+
+    return result;
   }
 }
