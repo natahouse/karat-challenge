@@ -8,6 +8,7 @@ import {
 import { CreateTransactionFromEventService } from './services';
 import { CardsModule } from '../cards/cards.module';
 import { AuthorizationsModule } from '../authorizations/authorizations.module';
+import { PaymentsModule } from '../payments/payments.module';
 
 @Module({
   controllers: [],
@@ -15,7 +16,7 @@ import { AuthorizationsModule } from '../authorizations/authorizations.module';
     { provide: TransactionRepository, useClass: SqlTransactionRepository },
     CreateTransactionFromEventService,
   ],
-  imports: [CardsModule, AuthorizationsModule],
+  imports: [CardsModule, AuthorizationsModule, PaymentsModule],
   exports: [CreateTransactionFromEventService],
 })
 export class TransactionsModule {}

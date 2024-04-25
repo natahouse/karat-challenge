@@ -13,7 +13,7 @@ export abstract class TransactionRepository {
   abstract save(
     transactionEntity: TransactionEntity,
     tx: Transaction,
-  ): Promise<void>;
+  ): Promise<Partial<TransactionEntity>>;
 
   abstract findByExternalId(idExternal: string): Promise<TransactionEntity>;
 }

@@ -4,6 +4,7 @@ import { DrizzleService } from 'src/modules/libs/drizzle/services/drizzle.servic
 import { TransactionEntity, TransactionEventEntity } from '../entities';
 import { CardRepository } from 'src/modules/cards/repositories';
 import { AuthorizationRepository } from 'src/modules/authorizations/repositories';
+import { PaymentRepository } from 'src/modules/payments/repositories';
 
 @Injectable()
 export class CreateTransactionFromEventService {
@@ -11,16 +12,17 @@ export class CreateTransactionFromEventService {
   constructor(
     private readonly transactionRepository: TransactionRepository,
     private readonly authorizationRepository: AuthorizationRepository,
+    private readonly paymentRepository: PaymentRepository,
     private readonly cardRepository: CardRepository,
     private readonly drizzleService: DrizzleService,
   ) {}
 
   async execute(event: TransactionEventEntity) {
     return this.drizzleService.getDb().transaction(async (tx) => {
-      const transaction = await this.transactionRepository.findByExternalId(
-        event.id,
-      );
-      if (transaction) {
+      const alreadyExists =
+        !!(await this.transactionRepository.findByExternalId(event.id));
+
+      if (alreadyExists) {
         this.logger.debug(
           `Transaction with external ID "${event.id}" was already registered. Exiting process...`,
         );
@@ -60,7 +62,26 @@ export class CreateTransactionFromEventService {
         idCard: card.id,
       };
 
-      await this.transactionRepository.save(entity, tx);
+      const transaction = await this.transactionRepository.save(entity, tx);
+
+      const payment = await this.paymentRepository.findOneByAuthorization(
+        authorization.id,
+      );
+
+      if (!payment)
+        throw new NotFoundException({
+          error: 'PaymentNotFound',
+          message: 'No payment entity found for the given authorization.',
+        });
+
+      await this.paymentRepository.update(
+        payment.id,
+        {
+          idTransaction: transaction.id,
+          status: 'approved',
+        },
+        tx,
+      );
     });
   }
 }

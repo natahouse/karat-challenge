@@ -38,10 +38,15 @@ export class SqlTransactionRepository implements TransactionRepository {
 
   async save(transaction: TransactionEntity, tx?: Transaction) {
     const dbContext = tx ?? this.drizzleService.getDb();
-    await dbContext.insert(this.schema).values({
-      idExternal: transaction.idExternal,
-      idCard: transaction.idCard,
-      idAuthorization: transaction.idAuthorization,
-    });
+    const [entity] = await dbContext
+      .insert(this.schema)
+      .values({
+        idExternal: transaction.idExternal,
+        idCard: transaction.idCard,
+        idAuthorization: transaction.idAuthorization,
+      })
+      .returning({ id: this.schema.id });
+
+    return entity;
   }
 }

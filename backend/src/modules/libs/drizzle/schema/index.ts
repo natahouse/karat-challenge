@@ -65,17 +65,27 @@ const paymentStatus = ['pending', 'approved', 'declined'] as const;
 export type PaymentStatus = (typeof paymentStatus)[number];
 export const paymentStatusEnum = pgEnum('paymentStatusEnum', paymentStatus);
 
-export const payment = pgTable('payments', {
-  ...baseColumns,
-  idCard: uuid('id_card')
-    .references(() => card.id)
-    .notNull(),
-  idAuthorization: uuid('id_authorization')
-    .references(() => authorization.id)
-    .notNull(),
-  idTransaction: uuid('id_transaction').references(() => transaction.id),
-  businessName: text('business_name'),
-  status: paymentStatusEnum('paymentStatus').default('pending').notNull(),
-  category: text('category').notNull(),
-  amount: integer('amount'),
-});
+export const payment = pgTable(
+  'payments',
+  {
+    ...baseColumns,
+    idCard: uuid('id_card')
+      .references(() => card.id)
+      .notNull(),
+    idAuthorization: uuid('id_authorization')
+      .references(() => authorization.id)
+      .notNull(),
+    idTransaction: uuid('id_transaction').references(() => transaction.id),
+    businessName: text('business_name'),
+    status: paymentStatusEnum('paymentStatus').default('pending').notNull(),
+    category: text('category').notNull(),
+    amount: integer('amount'),
+  },
+  (table) => {
+    return {
+      idAuthorizationIdx: index('payments_id_authorization_idx').on(
+        table.idAuthorization,
+      ),
+    };
+  },
+);
