@@ -1,9 +1,15 @@
 "use client"
 
-import { MoveDown, MoveUp } from "lucide-react"
+import { ChevronLeft, ChevronRight, MoveDown, MoveUp } from "lucide-react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import React from "react"
 
+import { Button } from "@/components/ui/button"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+} from "@/components/ui/pagination"
 import {
   Table as TableLib,
   TableBody,
@@ -12,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { configs } from "@/configs"
 import { cn } from "@/lib/utils"
 
 export interface Column<T> {
@@ -30,19 +37,23 @@ export interface DataTableProps<T> {
   data: T[]
   columns: Column<T>[]
   notFoundItemsMessage?: string
+  totalItems: number
 }
 
 export function DataTable<T extends { id: string }>({
   data,
   columns,
   notFoundItemsMessage = "Not found items",
+  totalItems,
 }: DataTableProps<T>) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
 
+  const totalPages = totalItems / configs.itemsPerPage
   const orderBy = searchParams.get("orderBy") ?? undefined
   const order = searchParams.get("order") ?? "asc"
+  const currentPage = Number(searchParams.get("page")) || 1
 
   const handleSort = (name: string, direction: string) => {
     const params = new URLSearchParams(searchParams)
@@ -60,6 +71,15 @@ export function DataTable<T extends { id: string }>({
     params.append("order", direction)
 
     return replace(`${pathname}?${params.toString()}`)
+  }
+
+  const handlePaginate = (page: number) => (e: React.MouseEvent) => {
+    e.preventDefault()
+
+    const params = new URLSearchParams(searchParams)
+    params.delete("page")
+    params.append("page", String(page))
+    replace(`${pathname}?${params.toString()}`)
   }
 
   return (
@@ -131,11 +151,41 @@ export function DataTable<T extends { id: string }>({
           ))}
         </TableBody>
       </TableLib>
+
       {!data.length && (
         <span className="my-8 flex justify-center text-muted-foreground">
           {notFoundItemsMessage}
         </span>
       )}
+
+      <Pagination className="mt-4">
+        <PaginationContent>
+          <PaginationItem>
+            <Button
+              size="icon"
+              variant="outline"
+              className="h-6 w-6"
+              disabled={currentPage <= 1}
+              onClick={handlePaginate(currentPage - 1)}
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+              <span className="sr-only">Previous Order</span>
+            </Button>
+          </PaginationItem>
+          <PaginationItem>
+            <Button
+              size="icon"
+              variant="outline"
+              className="h-6 w-6"
+              disabled={currentPage >= totalPages}
+              onClick={handlePaginate(currentPage + 1)}
+            >
+              <ChevronRight className="h-3.5 w-3.5" />
+              <span className="sr-only">Next Order</span>
+            </Button>
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   )
 }

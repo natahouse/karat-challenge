@@ -4,6 +4,7 @@ import Chart from "chart.js/auto"
 import { useEffect, useRef, useState } from "react"
 
 import { Skeleton } from "@/components/ui/skeleton"
+import { cn } from "@/lib/utils"
 
 import { getAmountByCategoryService } from "../../main/use-cases"
 
@@ -56,7 +57,7 @@ export const PieChart = () => {
   return (
     <>
       {isPending && <Skeleton className="h-[600px] w-full" />}
-      <canvas ref={ref}></canvas>
+      <canvas ref={ref} className={cn(isPending && "hidden")}></canvas>
     </>
   )
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
 import { Payment } from "@/_modules/payments/domain/entities/payment.entity"
@@ -10,16 +11,23 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { columns } from "./columns"
 
 export const PaymentDataTable = () => {
+  const searchParams = useSearchParams()
+  const page = searchParams.get("page")
+
   const [data, setData] = useState<Payment[]>([])
+  const [total, setTotal] = useState(0)
   const [isPending, setIsPending] = useState(true)
 
   useEffect(() => {
     setIsPending(true)
     listPaymentService
       .execute()
-      .then((result) => setData(result.payments))
+      .then((result) => {
+        setData(result.payments)
+        setTotal(result.total)
+      })
       .finally(() => setIsPending(false))
-  }, [])
+  }, [page])
 
   if (isPending) {
     return (
@@ -30,5 +38,5 @@ export const PaymentDataTable = () => {
     )
   }
 
-  return <DataTable columns={columns} data={data} />
+  return <DataTable columns={columns} data={data} totalItems={total} />
 }

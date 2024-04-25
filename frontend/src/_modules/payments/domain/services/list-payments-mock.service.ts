@@ -6,6 +6,7 @@ import {
 
 export class MockListPaymentService implements ListPaymentUseCase {
   async execute(): Promise<ListPaymentUseCaseOutput> {
+    await new Promise((resolve) => setTimeout(() => resolve(null), 2000))
     const payments: Payment[] = [
       {
         id: "1",
@@ -48,6 +49,6 @@ export class MockListPaymentService implements ListPaymentUseCase {
         amount: 450,
       },
     ]
-    return { payments, total: payments.length }
+    return { payments, total: 15 }
   }
 }

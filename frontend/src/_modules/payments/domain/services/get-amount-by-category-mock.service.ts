@@ -5,6 +5,7 @@ import {
 
 export class MockGetAmountByCategoryService implements GetAmountByCategory {
   async execute(): Promise<GetAmountByCategoryOutput> {
+    await new Promise((resolve) => setTimeout(() => resolve(null), 2000))
     return {
       categories: [
         { name: "Alimentação", amount: 100 },
