@@ -1,5 +1,19 @@
-import { MockGetAmountByCategory } from "../domain/services/get-amount-by-category-mock.service"
-import { MockListPaymentService } from "../domain/services/list-payments-mock.service"
+import { FetchHttpClient } from "@/_shared/infra/fetch-http"
+import { configs } from "@/configs"
 
-export const listPaymentService = new MockListPaymentService()
-export const getAmountByCategory = new MockGetAmountByCategory()
+import {
+  HttpGetAmountByCategoryService,
+  MockGetAmountByCategoryService,
+  HttpListPaymentService,
+  MockListPaymentService,
+} from "../domain/services"
+
+const httpClient = new FetchHttpClient()
+
+export const listPaymentService = configs.useMocks
+  ? new MockListPaymentService()
+  : new HttpListPaymentService(httpClient)
+
+export const getAmountByCategoryService = configs.useMocks
+  ? new MockGetAmountByCategoryService()
+  : new HttpGetAmountByCategoryService(httpClient)

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react"
 
 import { Skeleton } from "@/components/ui/skeleton"
 
-import { getAmountByCategory } from "../../main/use-cases"
+import { getAmountByCategoryService } from "../../main/use-cases"
 
 export const PieChart = () => {
   const [isPending, setIsPending] = useState(true)
@@ -18,7 +18,7 @@ export const PieChart = () => {
     chartLoaded.current = true
 
     setIsPending(true)
-    getAmountByCategory
+    getAmountByCategoryService
       .execute()
       .then((result) => {
         if (!ref.current) return

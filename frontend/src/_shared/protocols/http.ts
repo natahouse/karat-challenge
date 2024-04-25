@@ -5,8 +5,8 @@ export type HttpRequest = {
   headers?: any
 }
 
-export interface HttpClient<R = any> {
-  request: (data: HttpRequest) => Promise<HttpResponse<R>>
+export interface HttpClient {
+  request: <R = any>(data: HttpRequest) => Promise<HttpResponse<R>>
 }
 
 export type HttpMethod = "post" | "get" | "put" | "delete"
@@ -23,5 +23,5 @@ export enum HttpStatusCode {
 
 export type HttpResponse<T = any> = {
   statusCode: HttpStatusCode
-  body?: T
+  body: T
 }
