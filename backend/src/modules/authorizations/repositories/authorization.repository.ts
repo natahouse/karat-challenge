@@ -13,7 +13,9 @@ export abstract class AuthorizationRepository {
   abstract save(
     authorization: AuthorizationEntity,
     tx: Transaction,
-  ): Promise<void>;
+  ): Promise<Partial<AuthorizationEntity>>;
 
   abstract findByExternalId(idExternal: string): Promise<AuthorizationEntity>;
+
+  abstract findOne(id: string): Promise<AuthorizationEntity>;
 }

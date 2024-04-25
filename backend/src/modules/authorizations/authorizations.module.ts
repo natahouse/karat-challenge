@@ -8,6 +8,7 @@ import { FetchAllAuthorizationsService } from './services/fetch-all-authorizatio
 import { AuthorizationController } from './authorizations.controller';
 import { CreateAuthorizationFromEventService } from './services';
 import { CardsModule } from '../cards/cards.module';
+import { PaymentsModule } from '../payments/payments.module';
 
 @Module({
   controllers: [AuthorizationController],
@@ -16,7 +17,7 @@ import { CardsModule } from '../cards/cards.module';
     FetchAllAuthorizationsService,
     CreateAuthorizationFromEventService,
   ],
-  imports: [CardsModule],
+  imports: [CardsModule, PaymentsModule],
   exports: [
     CreateAuthorizationFromEventService,
     { provide: AuthorizationRepository, useClass: SqlAuthorizationRepository },

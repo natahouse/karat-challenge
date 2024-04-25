@@ -1,13 +1,10 @@
 import { Module } from '@nestjs/common';
-import { FetchAllPaymentsService } from './services';
-import { PaymentController } from './payment.controller';
+
 import { PaymentRepository, SqlPaymentRepository } from './repositories';
 
 @Module({
-  controllers: [PaymentController],
-  providers: [
-    { provide: PaymentRepository, useClass: SqlPaymentRepository },
-    FetchAllPaymentsService,
-  ],
+  controllers: [],
+  providers: [{ provide: PaymentRepository, useClass: SqlPaymentRepository }],
+  exports: [{ provide: PaymentRepository, useClass: SqlPaymentRepository }],
 })
 export class PaymentsModule {}

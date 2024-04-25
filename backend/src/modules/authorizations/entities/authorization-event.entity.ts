@@ -8,4 +8,9 @@ export type AuthorizationEventEntity = {
   };
   created: number;
   approved: boolean;
+  merchant_data: {
+    category: string;
+    category_code: string;
+    name: string;
+  };
 };

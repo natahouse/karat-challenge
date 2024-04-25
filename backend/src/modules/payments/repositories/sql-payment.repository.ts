@@ -3,6 +3,8 @@ import { DrizzleService } from 'src/modules/libs/drizzle/services/drizzle.servic
 
 import { payment } from 'src/modules/libs/drizzle/schema';
 import { PaymentRepository } from './payment.repository';
+import { PaymentEntity } from '../entities/payment.entity';
+import { Transaction } from 'src/modules/libs/drizzle/types';
 
 @Injectable()
 export class SqlPaymentRepository implements PaymentRepository {
@@ -10,9 +12,16 @@ export class SqlPaymentRepository implements PaymentRepository {
 
   constructor(private readonly drizzleService: DrizzleService) {}
 
-  async findAll() {
-    const db = this.drizzleService.getDb();
-
-    return await db.select({ id: this.schema.id }).from(this.schema);
+  async save(payment: PaymentEntity, tx?: Transaction) {
+    const dbContext = tx ?? this.drizzleService.getDb();
+    await dbContext.insert(this.schema).values({
+      status: payment.status,
+      amount: payment.amount,
+      category: payment.category,
+      businessName: payment.businessName,
+      idCard: payment.idCard,
+      idAuthorization: payment.idAuthorization,
+      idTransaction: payment.idTransaction,
+    });
   }
 }

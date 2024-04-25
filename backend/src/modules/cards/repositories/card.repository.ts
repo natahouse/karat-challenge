@@ -6,8 +6,5 @@ import { Transaction } from 'src/modules/libs/drizzle/types';
 export abstract class CardRepository {
   abstract findByExternalId(idExternal: string): Promise<CardEntity>;
 
-  abstract save(
-    card: Omit<CardEntity, 'id'>,
-    transaction?: Transaction,
-  ): Promise<void>;
+  abstract save(card: Omit<CardEntity, 'id'>, tx?: Transaction): Promise<void>;
 }

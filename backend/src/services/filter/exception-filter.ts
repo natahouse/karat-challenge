@@ -14,7 +14,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
-  catch(exception: unknown, host: ArgumentsHost): void {
+  catch(exception: any, host: ArgumentsHost): void {
     const { httpAdapter } = this.httpAdapterHost;
 
     const ctx = host.switchToHttp();
@@ -35,6 +35,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
       cause,
     };
 
+    if (exception.stack) {
+      this.logger.error(exception.stack);
+    }
     this.logger.error(exception);
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);

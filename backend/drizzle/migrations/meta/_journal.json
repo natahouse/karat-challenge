@@ -22,6 +22,13 @@
       "when": 1714051011437,
       "tag": "0002_cold_dark_beast",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1714056143030,
+      "tag": "0003_black_carnage",
+      "breakpoints": true
     }
   ]
 }

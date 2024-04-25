@@ -6,6 +6,7 @@ import {
   text,
   uuid,
   varchar,
+  pgEnum,
 } from 'drizzle-orm/pg-core';
 import { baseColumns } from '../utils';
 
@@ -60,6 +61,10 @@ export const transaction = pgTable(
   },
 );
 
+const paymentStatus = ['pending', 'approved', 'declined'] as const;
+export type PaymentStatus = (typeof paymentStatus)[number];
+export const paymentStatusEnum = pgEnum('paymentStatusEnum', paymentStatus);
+
 export const payment = pgTable('payments', {
   ...baseColumns,
   idCard: uuid('id_card')
@@ -68,10 +73,9 @@ export const payment = pgTable('payments', {
   idAuthorization: uuid('id_authorization')
     .references(() => authorization.id)
     .notNull(),
-  idTransaction: uuid('id_transaction')
-    .references(() => transaction.id)
-    .notNull(),
-  status: text('status').notNull(),
-  category: text('status').notNull(),
+  idTransaction: uuid('id_transaction').references(() => transaction.id),
+  businessName: text('business_name'),
+  status: paymentStatusEnum('paymentStatus').default('pending').notNull(),
+  category: text('category').notNull(),
   amount: integer('amount'),
 });

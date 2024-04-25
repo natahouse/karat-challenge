@@ -1,14 +1,16 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { AuthorizationRepository } from '../repositories';
 import { DrizzleService } from 'src/modules/libs/drizzle/services/drizzle.service';
-import { AuthorizationEntity, AuthorizationEventEntity } from '../entities';
+import { AuthorizationEventEntity } from '../entities';
 import { CardRepository } from 'src/modules/cards/repositories';
+import { PaymentRepository } from 'src/modules/payments/repositories';
 
 @Injectable()
 export class CreateAuthorizationFromEventService {
   private logger = new Logger(CreateAuthorizationFromEventService.name);
   constructor(
     private readonly authorizationRepository: AuthorizationRepository,
+    private readonly paymentRepository: PaymentRepository,
     private readonly cardRepository: CardRepository,
     private readonly drizzleService: DrizzleService,
   ) {}
@@ -24,23 +26,36 @@ export class CreateAuthorizationFromEventService {
         });
       }
 
-      const authorization = await this.authorizationRepository.findByExternalId(
-        event.id,
-      );
-      if (authorization) {
+      const alreadyExists =
+        !!(await this.authorizationRepository.findByExternalId(event.id));
+
+      if (alreadyExists) {
         this.logger.debug(
           `Authorization with external ID "${event.id}" was already registered. Exiting process...`,
         );
         return;
       }
 
-      const entity: AuthorizationEntity = {
-        idExternal: event.id,
-        approved: event.approved,
-        idCard: card.id,
-      };
+      const authorization = await this.authorizationRepository.save(
+        {
+          idExternal: event.id,
+          approved: event.approved,
+          idCard: card.id,
+        },
+        tx,
+      );
 
-      await this.authorizationRepository.save(entity, tx);
+      await this.paymentRepository.save(
+        {
+          amount: event.amount,
+          category: event.merchant_data.category,
+          businessName: event.merchant_data.name,
+          idCard: card.id,
+          idAuthorization: authorization.id,
+          status: !event.approved ? 'declined' : 'pending',
+        },
+        tx,
+      );
     });
   }
 }

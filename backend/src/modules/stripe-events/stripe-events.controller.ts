@@ -49,18 +49,17 @@ export class StripeEventsController {
 
     if (!event) throw new BadRequestException('Invalid Event');
 
-    if (event.type === 'issuing_authorization.created') {
-      await this.createAuthorizationFromEventService.execute(event.data.object);
-    }
-
-    if (event.type === 'issuing_transaction.created') {
-      await this.createTransactionFromEventService.execute(event.data.object);
-    }
-
     this.logger.debug({
       event,
     });
 
-    return { approved: true };
+    if (event.type === 'issuing_authorization.request') {
+      return { approved: true };
+    }
+
+    if (event.type === 'issuing_authorization.created') {
+      await this.createAuthorizationFromEventService.execute(event.data.object);
+      return { approved: true };
+    }
   }
 }
