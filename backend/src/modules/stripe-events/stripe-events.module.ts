@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { StripeEventsService } from './stripe-events.service';
 import { StripeEventsController } from './stripe-events.controller';
+import { AuthorizationsModule } from '../authorizations/authorizations.module';
 
 @Module({
   controllers: [StripeEventsController],
-  providers: [StripeEventsService],
-  imports: [],
+  imports: [AuthorizationsModule],
 })
 export class StripeEventsModule {}

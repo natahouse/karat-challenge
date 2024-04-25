@@ -17,5 +17,6 @@ import { CardsModule } from '../cards/cards.module';
     CreateAuthorizationFromEventService,
   ],
   imports: [CardsModule],
+  exports: [CreateAuthorizationFromEventService],
 })
 export class AuthorizationsModule {}

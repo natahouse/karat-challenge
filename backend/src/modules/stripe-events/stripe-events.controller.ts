@@ -1,23 +1,19 @@
 import {
   Controller,
-  Get,
   Post,
-  Req,
-  RawBodyRequest,
   Headers,
   BadRequestException,
   UnauthorizedException,
   Logger,
-  Res,
   RawBody,
   Header,
-  NotFoundException,
   HttpCode,
 } from '@nestjs/common';
 
 import { ConfigService } from '@nestjs/config';
 import { StripeService } from '../libs/stripe/services/stripe.service';
 import Stripe from 'stripe';
+import { CreateAuthorizationFromEventService } from '../authorizations/services';
 
 @Controller('stripe-events')
 export class StripeEventsController {
@@ -26,12 +22,13 @@ export class StripeEventsController {
   constructor(
     private readonly configService: ConfigService,
     private readonly stripeService: StripeService,
+    private readonly createAuthorizationFromEventService: CreateAuthorizationFromEventService,
   ) {}
 
   @Post()
   @Header('Stripe-Version', '2024-04-10')
   @HttpCode(200)
-  handleWebhook(
+  async handleWebhook(
     @RawBody() rawBody: any,
     @Headers('stripe-signature') signature,
   ) {
@@ -50,7 +47,8 @@ export class StripeEventsController {
 
     if (!event) throw new BadRequestException('Invalid Event');
 
-    if (event.type === 'issuing_authorization.request') {
+    if (event.type === 'issuing_authorization.created') {
+      await this.createAuthorizationFromEventService.execute(event.data.object);
     }
 
     if (event.type === 'issuing_transaction.created') {
