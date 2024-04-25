@@ -6,6 +6,7 @@ import { PaymentsModule } from '../payments/payments.module';
 import {
   FetchCardPaymentsService,
   FetchCardPaymentsMetricsService,
+  FetchCardPaymentsCategoriesService,
 } from './services';
 
 @Module({
@@ -14,6 +15,7 @@ import {
     CreateCardService,
     FetchCardPaymentsService,
     FetchCardPaymentsMetricsService,
+    FetchCardPaymentsCategoriesService,
     { provide: CardRepository, useClass: SqlCardRepository },
   ],
   imports: [PaymentsModule],

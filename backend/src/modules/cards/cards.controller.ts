@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { CreateCardService } from './services/create-card.service';
 import {
+  FetchCardPaymentsCategoriesService,
   FetchCardPaymentsMetricsService,
   FetchCardPaymentsService,
 } from './services';
@@ -22,6 +23,7 @@ export class CardsController {
     private readonly createCardService: CreateCardService,
     private readonly fetchCardPaymentsService: FetchCardPaymentsService,
     private readonly fetchCardPaymentsMetricsService: FetchCardPaymentsMetricsService,
+    private readonly fetchCardPaymentsCategoriesService: FetchCardPaymentsCategoriesService,
   ) {}
 
   @Post()
@@ -32,6 +34,11 @@ export class CardsController {
   @Get(':id/metrics')
   async fetchMetrics(@Param('id') id) {
     return await this.fetchCardPaymentsMetricsService.execute(id);
+  }
+
+  @Get(':id/metrics/categories')
+  async fetchCategoriesMetrics(@Param('id') id) {
+    return await this.fetchCardPaymentsCategoriesService.execute(id);
   }
 
   @Get(':id/payments')

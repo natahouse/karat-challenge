@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { CardRepository } from 'src/modules/cards/repositories';
-import { BaseFilters } from 'src/database/types';
 import { PaymentRepository } from 'src/modules/payments/repositories';
 
 @Injectable()

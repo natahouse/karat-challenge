@@ -142,6 +142,23 @@ export class SqlPaymentRepository implements PaymentRepository {
       .where(eq(this.schema.id, id));
   }
 
+  async getCategoryMetricsByCard(idCard: string) {
+    const db = this.drizzleService.getDb();
+
+    const result = await db
+      .select({
+        category: this.schema.category,
+        total: countDistinct(this.schema.id),
+      })
+      .from(this.schema)
+      .where(
+        and(eq(this.schema.idCard, idCard), eq(this.schema.status, 'approved')),
+      )
+      .groupBy(this.schema.category);
+
+    return result;
+  }
+
   async getMetricsByCard(idCard: string) {
     const db = this.drizzleService.getDb();
 

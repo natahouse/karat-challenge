@@ -22,6 +22,10 @@ export abstract class PaymentRepository {
     idCard: string,
   ): Promise<{ amount: number; total: number }>;
 
+  abstract getCategoryMetricsByCard(
+    idCard: string,
+  ): Promise<{ category: string; total: number }[]>;
+
   abstract update(
     id: string,
     fields: Partial<PaymentEntity>,
