@@ -8,7 +8,11 @@ export const columns: Column<Payment>[] = [
   {
     key: "status",
     label: "Status",
-    content: ({ status }) => <Badge>{status}</Badge>,
+    content: ({ status }) => (
+      <Badge variant={status === "approved" ? "affirmative" : "destructive"}>
+        {status}
+      </Badge>
+    ),
   },
   {
     key: "createdAt",
