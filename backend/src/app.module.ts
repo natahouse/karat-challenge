@@ -9,6 +9,7 @@ import { DrizzleModule } from './modules/libs/drizzle/drizzle.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { AuthorizationsModule } from './modules/authorizations/authorizations.module';
 import { CardsModule } from './modules/cards/cards.module';
+import { CacheManagerModule } from './modules/cache-manager/cache-manager.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CardsModule } from './modules/cards/cards.module';
         sync: configService.get<string>('NODE_ENV') === 'development',
       }),
     }),
+    CacheManagerModule,
     StripeModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({

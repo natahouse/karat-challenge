@@ -9,6 +9,7 @@ import { CreateTransactionFromEventService } from './services';
 import { CardsModule } from '../cards/cards.module';
 import { AuthorizationsModule } from '../authorizations/authorizations.module';
 import { PaymentsModule } from '../payments/payments.module';
+import { CacheManagerModule } from '../cache-manager/cache-manager.module';
 
 @Module({
   controllers: [],
@@ -16,7 +17,12 @@ import { PaymentsModule } from '../payments/payments.module';
     { provide: TransactionRepository, useClass: SqlTransactionRepository },
     CreateTransactionFromEventService,
   ],
-  imports: [CardsModule, AuthorizationsModule, PaymentsModule],
+  imports: [
+    CardsModule,
+    AuthorizationsModule,
+    PaymentsModule,
+    CacheManagerModule,
+  ],
   exports: [CreateTransactionFromEventService],
 })
 export class TransactionsModule {}

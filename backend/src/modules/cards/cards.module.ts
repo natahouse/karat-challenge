@@ -8,6 +8,7 @@ import {
   FetchCardPaymentsMetricsService,
   FetchCardPaymentsCategoriesService,
 } from './services';
+import { CacheManagerModule } from '../cache-manager/cache-manager.module';
 
 @Module({
   controllers: [CardsController],
@@ -18,7 +19,7 @@ import {
     FetchCardPaymentsCategoriesService,
     { provide: CardRepository, useClass: SqlCardRepository },
   ],
-  imports: [PaymentsModule],
+  imports: [PaymentsModule, CacheManagerModule],
   exports: [{ provide: CardRepository, useClass: SqlCardRepository }],
 })
 export class CardsModule {}

@@ -5,6 +5,7 @@ import { TransactionEntity, TransactionEventEntity } from '../entities';
 import { CardRepository } from 'src/modules/cards/repositories';
 import { AuthorizationRepository } from 'src/modules/authorizations/repositories';
 import { PaymentRepository } from 'src/modules/payments/repositories';
+import { CacheService } from 'src/modules/cache-manager/services';
 
 @Injectable()
 export class CreateTransactionFromEventService {
@@ -15,6 +16,7 @@ export class CreateTransactionFromEventService {
     private readonly paymentRepository: PaymentRepository,
     private readonly cardRepository: CardRepository,
     private readonly drizzleService: DrizzleService,
+    private readonly cacheManager: CacheService,
   ) {}
 
   async execute(event: TransactionEventEntity) {
@@ -29,15 +31,15 @@ export class CreateTransactionFromEventService {
         return;
       }
 
-      const idCard =
+      const idCardExternal =
         typeof event.card === 'string' ? event.card : event.card.id;
 
-      const card = await this.cardRepository.findByExternalId(idCard);
+      const card = await this.cardRepository.findByExternalId(idCardExternal);
 
       if (!card) {
         throw new NotFoundException({
           error: 'CardNotFound',
-          message: `Card with external ID "${idCard}" wasn't found`,
+          message: `Card with external ID "${idCardExternal}" wasn't found`,
         });
       }
 
@@ -68,6 +70,9 @@ export class CreateTransactionFromEventService {
       const payment = await this.paymentRepository.findOneByAuthorization(
         authorization.id,
       );
+
+      // invalidate cache for precalculated metrics
+      await this.cacheManager.delByPattern(`CARD:${card.id}:METRICS`);
 
       if (!payment)
         throw new NotFoundException({

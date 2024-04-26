@@ -26,7 +26,7 @@ export class DrizzleService implements OnModuleInit {
 
     connection.connect().then(() => {
       migrate(drizzle(connection), { migrationsFolder: './drizzle/migrations' })
-        .then(() => console.log('Migrations executed with success 🎉🎉'))
+        .then(() => this.logger.debug('Migrations executed with success 🎉🎉'))
         .catch((err) => console.error(err))
         .finally(() => {
           connection.end();
