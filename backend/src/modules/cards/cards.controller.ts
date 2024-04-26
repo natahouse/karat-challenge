@@ -44,27 +44,18 @@ export class CardsController {
   @Get(':id/payments')
   async fetchPayments(
     @Param('id') id,
-    @Query('limit') queryLimit,
-    @Query('offset') queryOffset,
+    @Query('page') queryPage,
     @Query('createdAt') queryCreatedAt,
   ) {
-    const limit =
-      queryLimit && !isNaN(parseInt(queryLimit))
-        ? parseInt(queryLimit)
-        : undefined;
-
-    const offset =
-      queryLimit && !isNaN(parseInt(queryOffset))
-        ? parseInt(queryOffset)
-        : undefined;
+    const page =
+      queryPage && !isNaN(parseInt(queryPage)) ? parseInt(queryPage) : 1;
 
     const createdAt = isDate(queryCreatedAt)
       ? new Date(queryCreatedAt)
       : undefined;
 
     return await this.fetchCardPaymentsService.execute(id, {
-      limit,
-      offset,
+      page,
       createdAt,
     });
   }

@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 
 import { CardRepository } from 'src/modules/cards/repositories';
-import { BaseFilters } from 'src/database/types';
 import { PaymentRepository } from 'src/modules/payments/repositories';
 
 @Injectable()
@@ -15,7 +14,7 @@ export class FetchCardPaymentsService {
     private readonly paymentRepository: PaymentRepository,
   ) {}
 
-  async execute(idCard: string, filters: BaseFilters) {
+  async execute(idCard: string, filters: { page: number; createdAt: Date }) {
     if (!idCard)
       throw new BadRequestException({
         error: 'MissingCardId',
@@ -30,6 +29,19 @@ export class FetchCardPaymentsService {
         message: `Card with ID "${idCard}" not found.`,
       });
 
-    return await this.paymentRepository.findByCard(idCard, filters);
+    const limit = 6;
+    const offset = limit * (filters.page - 1);
+    const createdAt = filters.createdAt;
+
+    const result = await this.paymentRepository.findByCard(idCard, {
+      limit,
+      offset,
+      createdAt,
+    });
+
+    return {
+      payments: result.entities,
+      total: result.total,
+    };
   }
 }
