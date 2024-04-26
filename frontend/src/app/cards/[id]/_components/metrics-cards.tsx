@@ -44,6 +44,7 @@ export const MetricsCards = (props: Props) => {
               formatCurrency(data.totalAmount)
             )}
           </CardTitle>
+          <CardDescription>From approved transactions</CardDescription>
         </CardHeader>
       </Card>
       <Card x-chunk="dashboard-05-chunk-2">
@@ -56,6 +57,7 @@ export const MetricsCards = (props: Props) => {
               formatCurrency(data.averageAmount)
             )}
           </CardTitle>
+          <CardDescription>From approved transactions</CardDescription>
         </CardHeader>
       </Card>
     </>

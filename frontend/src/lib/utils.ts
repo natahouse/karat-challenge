@@ -6,9 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(
-    new Date(date)
-  )
+  return date ? new Date(date).toLocaleString() : undefined
 }
 
 export function formatCurrency(value: number) {
