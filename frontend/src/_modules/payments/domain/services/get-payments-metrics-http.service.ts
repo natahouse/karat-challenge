@@ -1,5 +1,6 @@
 import {
   GetPaymentsMetricsUseCase,
+  GetPaymentsMetricsUseCaseInput,
   GetPaymentsMetricsUseCaseOutput,
 } from "@/_modules/payments/domain/use-cases"
 import { HttpClient } from "@/_shared/protocols/http"
@@ -10,17 +11,22 @@ export class HttpGetPaymentsMetricsService
 {
   constructor(private readonly httpClient: HttpClient) {}
 
-  async execute(): Promise<GetPaymentsMetricsUseCaseOutput> {
+  async execute(
+    input: GetPaymentsMetricsUseCaseInput
+  ): Promise<GetPaymentsMetricsUseCaseOutput> {
     const { body } = await this.httpClient.request<ApiReturnType>({
-      url: configs.apiBaseUrl + "/metrics",
+      url: `${configs.apiBaseUrl}/cards/${input.id}/metrics`,
       method: "get",
     })
 
-    return { totalAmount: body.total, averageAmount: body.average }
+    const average =
+      (body.amount && body.total) > 0 ? body.amount / body.total : 0
+
+    return { totalAmount: body.amount, averageAmount: average }
   }
 }
 
 type ApiReturnType = {
+  amount: number
   total: number
-  average: number
 }

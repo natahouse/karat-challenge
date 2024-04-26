@@ -10,11 +10,15 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 import { columns } from "./columns"
 
-export const PaymentDataTable = () => {
-  const searchParams = useSearchParams()
-  const page = searchParams.get("page")
+type Props = {
+  idCard: string
+}
 
-  const [untilDate] = useState<string>(new Date().toISOString())
+export const PaymentDataTable = (props: Props) => {
+  const searchParams = useSearchParams()
+  const page = searchParams.get("page") ?? "1"
+
+  const [createdAt] = useState<string>(new Date().toISOString())
   const [data, setData] = useState<Payment[]>([])
   const [total, setTotal] = useState(0)
   const [isPending, setIsPending] = useState(true)
@@ -22,13 +26,13 @@ export const PaymentDataTable = () => {
   useEffect(() => {
     setIsPending(true)
     listPaymentService
-      .execute({ untilDate })
+      .execute({ id: props.idCard, createdAt, page })
       .then((result) => {
         setData(result.payments)
         setTotal(result.total)
       })
       .finally(() => setIsPending(false))
-  }, [page, untilDate])
+  }, [page, createdAt, props.idCard])
 
   if (isPending) {
     return (

@@ -3,12 +3,15 @@
 import Chart from "chart.js/auto"
 import { useEffect, useRef, useState } from "react"
 
+import { getAmountByCategoryService } from "@/_modules/payments/main/use-cases"
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
 
-import { getAmountByCategoryService } from "../../main/use-cases"
+type Props = {
+  idCard: string
+}
 
-export const PieChart = () => {
+export const PieChart = (props: Props) => {
   const [isPending, setIsPending] = useState(true)
 
   const ref = useRef(null)
@@ -20,7 +23,7 @@ export const PieChart = () => {
 
     setIsPending(true)
     getAmountByCategoryService
-      .execute()
+      .execute({ id: props.idCard })
       .then((result) => {
         if (!ref.current) return
 
@@ -28,7 +31,7 @@ export const PieChart = () => {
           labels: result.categories.map(({ name }) => name),
           datasets: [
             {
-              label: "Dataset 1",
+              label: "Frequency",
               data: result.categories.map(({ amount }) => amount),
             },
           ],
@@ -43,16 +46,12 @@ export const PieChart = () => {
               legend: {
                 position: "top",
               },
-              title: {
-                display: true,
-                text: "Chart.js Pie Chart",
-              },
             },
           },
         })
       })
       .finally(() => setIsPending(false))
-  }, [])
+  }, [props.idCard])
 
   return (
     <>

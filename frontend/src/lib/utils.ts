@@ -6,13 +6,13 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short" }).format(
+  return new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(
     new Date(date)
   )
 }
 
 export function formatCurrency(value: number) {
-  return Intl.NumberFormat("pt-BR", {
+  return Intl.NumberFormat("en-US", {
     currency: "BRL",
     currencyDisplay: "symbol",
     currencySign: "standard",

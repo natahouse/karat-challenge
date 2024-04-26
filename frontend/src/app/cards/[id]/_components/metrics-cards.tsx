@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react"
 
+import { GetPaymentsMetricsUseCaseOutput } from "@/_modules/payments/domain/use-cases"
+import { getPaymentsMetricsService } from "@/_modules/payments/main/use-cases"
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -12,10 +13,11 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { formatCurrency } from "@/lib/utils"
 
-import { GetPaymentsMetricsUseCaseOutput } from "../../domain/use-cases"
-import { getPaymentsMetricsService } from "../../main/use-cases"
+type Props = {
+  idCard: string
+}
 
-export const MetricsCards = () => {
+export const MetricsCards = (props: Props) => {
   const [data, setData] = useState<GetPaymentsMetricsUseCaseOutput>({
     totalAmount: 0,
     averageAmount: 0,
@@ -25,16 +27,16 @@ export const MetricsCards = () => {
   useEffect(() => {
     setIsPending(true)
     getPaymentsMetricsService
-      .execute()
+      .execute({ id: props.idCard })
       .then((result) => setData(result))
       .finally(() => setIsPending(false))
-  }, [])
+  }, [props.idCard])
 
   return (
     <>
       <Card x-chunk="dashboard-05-chunk-1">
         <CardHeader className="pb-2">
-          <CardDescription>Soma de gastos</CardDescription>
+          <CardDescription>Total Amount</CardDescription>
           <CardTitle className="text-4xl">
             {isPending ? (
               <Skeleton className="h-[40px] w-full" />
@@ -43,15 +45,10 @@ export const MetricsCards = () => {
             )}
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-xs text-muted-foreground">
-            +25% from last week
-          </div>
-        </CardContent>
       </Card>
       <Card x-chunk="dashboard-05-chunk-2">
         <CardHeader className="pb-2">
-          <CardDescription>Média de gastos</CardDescription>
+          <CardDescription>Avg Amount</CardDescription>
           <CardTitle className="text-4xl">
             {isPending ? (
               <Skeleton className="h-[40px] w-full" />
@@ -60,11 +57,6 @@ export const MetricsCards = () => {
             )}
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-xs text-muted-foreground">
-            +10% from last month
-          </div>
-        </CardContent>
       </Card>
     </>
   )

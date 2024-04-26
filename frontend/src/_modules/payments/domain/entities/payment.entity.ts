@@ -1,8 +1,7 @@
-export interface Payment {
+export type Payment = {
   id: string
-  customer: string
-  type: string
-  status: string
-  date: Date
+  businessName: string
   amount: number
+  status: "approved" | "declined"
+  createdAt: Date
 }

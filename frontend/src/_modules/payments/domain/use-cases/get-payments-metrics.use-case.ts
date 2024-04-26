@@ -5,7 +5,7 @@ export type GetPaymentsMetricsUseCase = UseCase<
   GetPaymentsMetricsUseCaseOutput
 >
 
-export type GetPaymentsMetricsUseCaseInput = {}
+export type GetPaymentsMetricsUseCaseInput = { id: string }
 export type GetPaymentsMetricsUseCaseOutput = {
   totalAmount: number
   averageAmount: number

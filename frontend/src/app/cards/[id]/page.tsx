@@ -1,4 +1,4 @@
-import { File, ListFilter } from "lucide-react"
+import { ListFilter } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,13 +16,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent } from "@/components/ui/tabs"
 
-import { PaymentDataTable } from "../components/data-table"
-import { MetricsCards } from "../components/metrics-cards"
-import { PieChart } from "../components/pie-chart"
+import { MetricsCards, PieChart, PaymentDataTable } from "./_components"
 
-export function PaymentDashboardPage() {
+type Props = {
+  params: { id: string }
+}
+
+export default function PaymentDashboardPage({ params }: Props) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40 p-4">
       <main className="grid flex-1 items-start gap-4 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
@@ -30,22 +32,17 @@ export function PaymentDashboardPage() {
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
             <Card className="sm:col-span-2" x-chunk="dashboard-05-chunk-0">
               <CardHeader className="pb-3">
-                <CardTitle>Your Orders</CardTitle>
+                <CardTitle>Card Metrics</CardTitle>
                 <CardDescription className="max-w-lg text-balance leading-relaxed">
-                  Introducing Our Dynamic Orders Dashboard for Seamless
-                  Management and Insightful Analysis.
+                  In this dashboard you may find your authorizations,
+                  transactions and metrics related to merchant categories
                 </CardDescription>
               </CardHeader>
             </Card>
-            <MetricsCards />
+            <MetricsCards idCard={params.id} />
           </div>
           <Tabs defaultValue="week">
             <div className="flex items-center">
-              <TabsList>
-                <TabsTrigger value="week">Week</TabsTrigger>
-                <TabsTrigger value="month">Month</TabsTrigger>
-                <TabsTrigger value="year">Year</TabsTrigger>
-              </TabsList>
               <div className="ml-auto flex items-center gap-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -62,36 +59,25 @@ export function PaymentDashboardPage() {
                     <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuCheckboxItem checked>
-                      Fulfilled
+                      Approved
                     </DropdownMenuCheckboxItem>
                     <DropdownMenuCheckboxItem>
                       Declined
                     </DropdownMenuCheckboxItem>
-                    <DropdownMenuCheckboxItem>
-                      Refunded
-                    </DropdownMenuCheckboxItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="h-7 gap-1 text-sm"
-                >
-                  <File className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only">Export</span>
-                </Button>
               </div>
             </div>
             <TabsContent value="week">
               <Card x-chunk="dashboard-05-chunk-3">
                 <CardHeader className="px-7">
-                  <CardTitle>Orders</CardTitle>
+                  <CardTitle>Transactions</CardTitle>
                   <CardDescription>
-                    Recent orders from your store.
+                    Recent transactions for the given card
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <PaymentDataTable />
+                  <PaymentDataTable idCard={params.id} />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -102,13 +88,12 @@ export function PaymentDashboardPage() {
             <CardHeader className="flex flex-row items-start bg-muted/50">
               <div className="grid gap-0.5">
                 <CardTitle className="flex items-center gap-2 text-lg">
-                  Order Oe31b70H
+                  Category Frequency
                 </CardTitle>
-                <CardDescription>Date: November 23, 2023</CardDescription>
               </div>
             </CardHeader>
             <CardContent className="p-6 text-sm">
-              <PieChart />
+              <PieChart idCard={params.id} />
             </CardContent>
           </Card>
         </div>

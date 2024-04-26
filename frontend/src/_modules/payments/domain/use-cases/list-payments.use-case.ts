@@ -6,5 +6,9 @@ export type ListPaymentUseCase = UseCase<
   ListPaymentUseCaseOutput
 >
 
-export type ListPaymentUseCaseInput = { untilDate?: string }
+export type ListPaymentUseCaseInput = {
+  id: string
+  createdAt?: string
+  page: string
+}
 export type ListPaymentUseCaseOutput = { payments: Payment[]; total: number }

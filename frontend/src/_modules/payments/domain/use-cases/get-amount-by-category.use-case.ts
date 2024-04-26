@@ -5,7 +5,7 @@ export type GetAmountByCategory = UseCase<
   GetAmountByCategoryOutput
 >
 
-export type GetAmountByCategoryInput = {}
+export type GetAmountByCategoryInput = { id: string }
 export type GetAmountByCategoryOutput = {
   categories: { name: string; amount: number }[]
 }
