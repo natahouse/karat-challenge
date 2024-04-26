@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { CardRepository } from 'src/modules/cards/repositories';
 import { BaseFilters } from 'src/database/types';
@@ -12,6 +16,12 @@ export class FetchCardPaymentsService {
   ) {}
 
   async execute(idCard: string, filters: BaseFilters) {
+    if (!idCard)
+      throw new BadRequestException({
+        error: 'MissingCardId',
+        message: 'Card ID is required',
+      });
+
     const card = await this.repository.findOne(idCard);
 
     if (!card)

@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { TransactionRepository } from '../repositories';
 import { DrizzleService } from 'src/modules/libs/drizzle/services/drizzle.service';
-import { TransactionEntity, TransactionEventEntity } from '../entities';
+import { TransactionEventEntity } from '../entities';
 import { CardRepository } from 'src/modules/cards/repositories';
 import { AuthorizationRepository } from 'src/modules/authorizations/repositories';
 import { PaymentRepository } from 'src/modules/payments/repositories';

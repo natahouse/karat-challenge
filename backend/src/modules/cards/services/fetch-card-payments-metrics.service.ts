@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CacheService } from 'src/modules/cache-manager/services';
 
 import { CardRepository } from 'src/modules/cards/repositories';
@@ -14,6 +19,12 @@ export class FetchCardPaymentsMetricsService {
   ) {}
 
   async execute(idCard: string) {
+    if (!idCard)
+      throw new BadRequestException({
+        error: 'MissingCardId',
+        message: 'Card ID is required',
+      });
+
     const cached = await this.cacheManager.get(`CARD:${idCard}:METRICS`);
     if (cached) {
       this.logger.debug('Cache hit');
