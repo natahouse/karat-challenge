@@ -13,7 +13,7 @@ export function formatDate(date: Date) {
 
 export function formatCurrency(value: number) {
   return Intl.NumberFormat("en-US", {
-    currency: "BRL",
+    currency: "USD",
     currencyDisplay: "symbol",
     currencySign: "standard",
     style: "currency",
