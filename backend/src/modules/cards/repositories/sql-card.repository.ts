@@ -16,9 +16,14 @@ export class SqlCardRepository implements CardRepository {
   async save(card: Omit<CardEntity, 'id'>, tx?: Transaction) {
     const dbContext = tx ?? this.drizzleService.getDb();
 
-    await dbContext.insert(this.schema).values({
-      idExternal: card.idExternal,
-    });
+    const [newCard] = await dbContext
+      .insert(this.schema)
+      .values({
+        idExternal: card.idExternal,
+      })
+      .returning({ id: this.schema.id, idExternal: this.schema.idExternal });
+
+    return newCard;
   }
 
   async findOne(id: string) {

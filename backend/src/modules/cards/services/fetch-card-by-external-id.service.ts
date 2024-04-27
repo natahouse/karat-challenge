@@ -1,14 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { DrizzleService } from 'src/modules/libs/drizzle/services/drizzle.service';
 import { CardRepository } from 'src/modules/cards/repositories';
 
 @Injectable()
-export class CreateCardService {
-  constructor(
-    private readonly repository: CardRepository,
-    private readonly drizzleService: DrizzleService,
-  ) {}
+export class FetchCardByExternalIdService {
+  constructor(private readonly repository: CardRepository) {}
 
   async execute(idExternal: string) {
     if (!idExternal || typeof idExternal !== 'string') {
@@ -17,8 +13,7 @@ export class CreateCardService {
         message: '"idExternal" must be sent with the payload as a string',
       });
     }
-    return this.drizzleService.getDb().transaction(async (tx) => {
-      return await this.repository.save({ idExternal }, tx);
-    });
+
+    return await this.repository.findByExternalId(idExternal);
   }
 }

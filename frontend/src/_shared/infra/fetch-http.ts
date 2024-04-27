@@ -8,7 +8,8 @@ export class FetchHttpClient implements HttpClient {
       headers: data.headers,
     })
 
-    const json = await response.json()
+    const string = await response.text()
+    const json = string === "" ? {} : JSON.parse(string)
 
     return {
       statusCode: response.status,

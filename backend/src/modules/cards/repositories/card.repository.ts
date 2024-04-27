@@ -8,5 +8,8 @@ export abstract class CardRepository {
 
   abstract findByExternalId(idExternal: string): Promise<CardEntity>;
 
-  abstract save(card: Omit<CardEntity, 'id'>, tx?: Transaction): Promise<void>;
+  abstract save(
+    card: Omit<CardEntity, 'id'>,
+    tx?: Transaction,
+  ): Promise<CardEntity>;
 }

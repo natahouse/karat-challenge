@@ -1,4 +1,5 @@
-import { UseCase } from "./use-case"
+import { UseCase } from "@/_modules/types"
+
 import { Payment } from "../entities/payment.entity"
 
 export type ListPaymentUseCase = UseCase<

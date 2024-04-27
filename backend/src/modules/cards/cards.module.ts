@@ -7,6 +7,7 @@ import {
   FetchCardPaymentsService,
   FetchCardPaymentsMetricsService,
   FetchCardPaymentsCategoriesService,
+  FetchCardByExternalIdService,
 } from './services';
 import { CacheManagerModule } from '../cache-manager/cache-manager.module';
 
@@ -15,6 +16,7 @@ import { CacheManagerModule } from '../cache-manager/cache-manager.module';
   providers: [
     CreateCardService,
     FetchCardPaymentsService,
+    FetchCardByExternalIdService,
     FetchCardPaymentsMetricsService,
     FetchCardPaymentsCategoriesService,
     { provide: CardRepository, useClass: SqlCardRepository },

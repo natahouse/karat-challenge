@@ -43,7 +43,7 @@ export interface DataTableProps<T> {
 export function DataTable<T extends { id: string }>({
   data,
   columns,
-  notFoundItemsMessage = "Not found items",
+  notFoundItemsMessage = "No items were found",
   totalItems,
 }: DataTableProps<T>) {
   const searchParams = useSearchParams()

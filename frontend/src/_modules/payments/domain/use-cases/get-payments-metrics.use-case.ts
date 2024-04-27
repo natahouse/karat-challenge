@@ -1,4 +1,4 @@
-import { UseCase } from "./use-case"
+import { UseCase } from "@/_modules/types"
 
 export type GetPaymentsMetricsUseCase = UseCase<
   GetPaymentsMetricsUseCaseInput,

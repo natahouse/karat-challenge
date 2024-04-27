@@ -59,12 +59,10 @@ export class StripeEventsController {
 
     if (event.type === 'issuing_authorization.created') {
       await this.createAuthorizationFromEventService.execute(event.data.object);
-      return { approved: true };
     }
 
     if (event.type === 'issuing_transaction.created') {
       await this.createTransactionFromEventService.execute(event.data.object);
-      return { approved: true };
     }
   }
 }

@@ -8,4 +8,6 @@ echo 'Conexão com banco de dados estabelecida'
 
 npm run migrate 
 
+npm run build 
+
 npm run start:prod
