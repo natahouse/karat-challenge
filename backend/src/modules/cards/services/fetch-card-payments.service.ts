@@ -40,7 +40,14 @@ export class FetchCardPaymentsService {
     });
 
     return {
-      payments: result.entities,
+      payments: result.entities.map((payment) => ({
+        id: payment.id,
+        amount: payment.amount / 100,
+        businessName: payment.businessName,
+        createdAt: payment.createdAt,
+        idCard: payment.idCard,
+        status: payment.status,
+      })),
       total: result.total,
     };
   }
