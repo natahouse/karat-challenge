@@ -39,7 +39,12 @@ export class FetchCardPaymentsMetricsService {
         message: `Card with ID "${idCard}" not found.`,
       });
 
-    const metrics = await this.paymentRepository.getMetricsByCard(idCard);
+    const result = await this.paymentRepository.getMetricsByCard(idCard);
+
+    const metrics = {
+      amount: result.amount / 100,
+      total: result.total,
+    };
 
     this.cacheManager.set(
       `CARD:${idCard}:METRICS`,
