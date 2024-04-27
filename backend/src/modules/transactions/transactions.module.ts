@@ -13,8 +13,6 @@ import { CardsModule } from '../cards/cards.module';
 import { AuthorizationsModule } from '../authorizations/authorizations.module';
 import { PaymentsModule } from '../payments/payments.module';
 import { CacheManagerModule } from '../cache-manager/cache-manager.module';
-import { BullModule } from '@nestjs/bull';
-import { queueNames } from 'src/constants/queues';
 
 @Module({
   controllers: [],
@@ -28,9 +26,6 @@ import { queueNames } from 'src/constants/queues';
     AuthorizationsModule,
     PaymentsModule,
     CacheManagerModule,
-    BullModule.registerQueue({
-      name: queueNames.TRANSACTION_QUEUE_NAME,
-    }),
   ],
   exports: [CreateTransactionFromEventService],
 })

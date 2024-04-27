@@ -16,17 +16,13 @@ import { BullAdapter } from '@bull-board/api/bullAdapter';
   imports: [
     AuthorizationsModule,
     TransactionsModule,
-    BullModule.registerQueue(
-      {
-        name: queueNames.AUTHORIZATION_QUEUE_NAME,
+    BullModule.registerQueue({
+      name: queueNames.AUTHORIZATION_QUEUE_NAME,
+      defaultJobOptions: {
+        removeOnComplete: DEFAULT_REMOVE_ON_COMPLETION,
+        removeOnFail: DEFAULT_REMOVE_ON_FAIL,
       },
-      {
-        defaultJobOptions: {
-          removeOnComplete: DEFAULT_REMOVE_ON_COMPLETION,
-          removeOnFail: DEFAULT_REMOVE_ON_FAIL,
-        },
-      },
-    ),
+    }),
     BullBoardModule.forFeature({
       name: queueNames.AUTHORIZATION_QUEUE_NAME,
       adapter: BullAdapter,
