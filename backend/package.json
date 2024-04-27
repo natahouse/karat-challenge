@@ -19,7 +19,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migrate:generate": "drizzle-kit generate:pg",
-    "migrate": "tsx ./drizzle/migrations/migrate.ts"
+    "migrate": "tsx ./drizzle/migrations/migrate.ts",
+    "seed": "tsx ./drizzle/migrations/seed.ts"
   },
   "dependencies": {
     "@nestjs/bull": "^10.1.1",
