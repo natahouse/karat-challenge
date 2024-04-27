@@ -11,7 +11,6 @@ services:
     env_file: "./backend/.env"
 
   redis:
-    container_name: redis-compose
     image: redis:7.2.4-alpine
     restart: always
     command: redis-server --save 20 1 --loglevel warning
