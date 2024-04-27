@@ -10,6 +10,8 @@ import { PaymentsModule } from './modules/payments/payments.module';
 import { AuthorizationsModule } from './modules/authorizations/authorizations.module';
 import { CardsModule } from './modules/cards/cards.module';
 import { CacheManagerModule } from './modules/cache-manager/cache-manager.module';
+import { BullBoardModule } from '@bull-board/nestjs';
+import { ExpressAdapter } from '@bull-board/express';
 
 @Module({
   imports: [
@@ -43,6 +45,10 @@ import { CacheManagerModule } from './modules/cache-manager/cache-manager.module
           port: configService.get('REDIS_PORT'),
         },
       }),
+    }),
+    BullBoardModule.forRoot({
+      route: '/queues',
+      adapter: ExpressAdapter,
     }),
     PaymentsModule,
     AuthorizationsModule,
