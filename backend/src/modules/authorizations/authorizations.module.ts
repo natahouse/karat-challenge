@@ -4,9 +4,12 @@ import {
   AuthorizationRepository,
   SqlAuthorizationRepository,
 } from './repositories';
-import { FetchAllAuthorizationsService } from './services/fetch-all-authorizations.service';
 import { AuthorizationController } from './authorizations.controller';
-import { CreateAuthorizationFromEventService } from './services';
+import {
+  AuthorizationEventConsumer,
+  CreateAuthorizationFromEventService,
+  FetchAllAuthorizationsService,
+} from './services';
 import { CardsModule } from '../cards/cards.module';
 import { PaymentsModule } from '../payments/payments.module';
 
@@ -16,6 +19,7 @@ import { PaymentsModule } from '../payments/payments.module';
     { provide: AuthorizationRepository, useClass: SqlAuthorizationRepository },
     FetchAllAuthorizationsService,
     CreateAuthorizationFromEventService,
+    AuthorizationEventConsumer,
   ],
   imports: [CardsModule, PaymentsModule],
   exports: [

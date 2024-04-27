@@ -13,8 +13,11 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { StripeService } from '../libs/stripe/services/stripe.service';
 import Stripe from 'stripe';
-import { CreateAuthorizationFromEventService } from '../authorizations/services';
-import { CreateTransactionFromEventService } from '../transactions/services';
+import { InjectQueue } from '@nestjs/bull';
+import { queueNames } from 'src/constants/queues';
+import { Queue } from 'bull';
+import { AuthorizationEventEntity } from '../authorizations/entities';
+import { TransactionEventEntity } from '../transactions/entities';
 
 @Controller('stripe-events')
 export class StripeEventsController {
@@ -23,8 +26,10 @@ export class StripeEventsController {
   constructor(
     private readonly configService: ConfigService,
     private readonly stripeService: StripeService,
-    private readonly createAuthorizationFromEventService: CreateAuthorizationFromEventService,
-    private readonly createTransactionFromEventService: CreateTransactionFromEventService,
+    @InjectQueue(queueNames.AUTHORIZATION_QUEUE_NAME)
+    private authorizationQueue: Queue<AuthorizationEventEntity>,
+    @InjectQueue(queueNames.TRANSACTION_QUEUE_NAME)
+    private transactionQueue: Queue<TransactionEventEntity>,
   ) {}
 
   @Post()
@@ -58,11 +63,11 @@ export class StripeEventsController {
     }
 
     if (event.type === 'issuing_authorization.created') {
-      await this.createAuthorizationFromEventService.execute(event.data.object);
+      await this.authorizationQueue.add(event.data.object);
     }
 
     if (event.type === 'issuing_transaction.created') {
-      await this.createTransactionFromEventService.execute(event.data.object);
+      await this.transactionQueue.add(event.data.object);
     }
   }
 }
